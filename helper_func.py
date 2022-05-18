@@ -13,7 +13,7 @@ from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from config import ADMINS, FORCE_SUB_CHANNEL1, FORCE_SUB_CHANNEL2, FORCE_SUB_CHANNEL3
 
 
-async def subschannel(filter, client, update):
+async def subschannel1(filter, client, update):
     if not FORCE_SUB_CHANNEL1:
         return True
     user_id = update.from_user.id
@@ -29,7 +29,7 @@ async def subschannel(filter, client, update):
     return member.status in ["creator", "administrator", "member"]
 
 
-async def subschannel(filter, client, update):
+async def subschannel2(filter, client, update):
     if not FORCE_SUB_CHANNEL2:
         return True
     user_id = update.from_user.id
@@ -42,15 +42,15 @@ async def subschannel(filter, client, update):
 
     return member.status in ["creator", "administrator", "member"]
 
-async def subschannel(filter, client, update):
-    if not FORCE_SUB_CHANNEL1:
+async def subschannel3(filter, client, update):
+    if not FORCE_SUB_CHANNEL3:
         return True
     user_id = update.from_user.id
     if user_id in ADMINS:
         return True
     try:
         member = await client.get_chat_member(
-            chat_id=FORCE_SUB_CHANNEL1, user_id=user_id
+            chat_id=FORCE_SUB_CHANNEL3, user_id=user_id
         )
     except UserNotParticipant:
         return False
@@ -142,6 +142,7 @@ async def get_message_id(client, message):
             return msg_id
 
 
-subsgc = filters.create(subsgroup)
-subsch = filters.create(subschannel)
+subsch = filters.create(subschannel1)
+subsch = filters.create(subschannel2)
+subsch = filters.create(subschannel3)
 subsall = filters.create(is_subscribed)
